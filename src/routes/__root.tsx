@@ -1,0 +1,49 @@
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
+import type { ReactNode } from "react";
+
+import appCss from "~/styles/app.css?url";
+
+interface RouterContext {
+  isAuthenticated: boolean;
+  user: { id: string; email: string; name: string; plan: string } | null;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "ReviewDigest" },
+    ],
+    links: [{ rel: "stylesheet", href: appCss }],
+  }),
+  notFoundComponent: () => <div>Page not found</div>,
+  component: RootComponent,
+});
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  );
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
